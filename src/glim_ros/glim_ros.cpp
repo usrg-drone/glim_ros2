@@ -171,16 +171,16 @@ GlimROS::GlimROS(const rclcpp::NodeOptions& options) : Node("glim_ros", options)
   const std::string points_topic = config_ros.param<std::string>("glim_ros", "points_topic", "");
   const std::string image_topic = config_ros.param<std::string>("glim_ros", "image_topic", "");
 
-  // int qos_depths;
-  // this->declare_parameter<int>("qos_depths", 10);
-  // this->get_parameter<int>("qos_depths", qos_depths);
+  int qos_depths;
+  this->declare_parameter<int>("qos_depths", 100);
+  this->get_parameter<int>("qos_depths", qos_depths);
 
   // Subscribers
   auto imu_qos = rclcpp::SensorDataQoS();
   imu_qos.get_rmw_qos_profile().depth = 1000;
   imu_sub = this->create_subscription<sensor_msgs::msg::Imu>(imu_topic, imu_qos, std::bind(&GlimROS::imu_callback, this, _1));
   auto points_qos = rclcpp::SensorDataQoS();
-  points_qos.get_rmw_qos_profile().depth = 100;
+  points_qos.get_rmw_qos_profile().depth = qos_depths;
   points_sub = this->create_subscription<sensor_msgs::msg::PointCloud2>(points_topic, points_qos, std::bind(&GlimROS::points_callback, this, _1));
   image_sub = image_transport::create_subscription(this, image_topic, std::bind(&GlimROS::image_callback, this, _1), "raw", rmw_qos_profile_sensor_data);
 
