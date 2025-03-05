@@ -184,7 +184,7 @@ int main(int argc, char** argv) {
 
       if (start_offset > 0.0) {
         spdlog::info("skipping msg for start_offset {}", start_offset);
-        reader.seek(bag_t0 + start_offset * 1e9);
+        // reader.seek(bag_t0 + start_offset * 1e9);
 
         start_offset = 0.0;
         bag_t0 = 0;
